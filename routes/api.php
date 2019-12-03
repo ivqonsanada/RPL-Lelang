@@ -24,8 +24,8 @@ Route::get('cari-barang-lelang', 'AuctionController@searchAuction');
 Route::get('barang/{idToko}', 'AuctionController@getShopAuction');
 Route::get('hotItem', 'AuctionController@getHotItem');
 Route::get('rekomen', 'AuctionController@getRekomen');
+Route::get('sold', 'AuctionController@getSold');
 Route::get('barangdetail/{id}', 'AuctionController@readAuction');
-// ShopController
 Route::get('toko/{id}', 'ShopController@readShop');
 
 // need to authorized
@@ -36,7 +36,6 @@ Route::group(['middleware' => ['checkjwt']], function () {
     Route::post('unggah-foto-profil', 'UserController@uploadPhoto');
     Route::get('histori-transaksi-pengguna', 'TransactionController@getUserTransactionHistory');
 
-    // Alamat Pengiriman
     Route::post('tambah-alamat-pengiriman', 'UserController@addAddress');
     Route::get('alamat-pengiriman', 'UserController@getUserAddress');
     Route::post('ubah-alamat-pengiriman/{id}', 'UserController@updateAddress');

@@ -16,6 +16,7 @@ class PenawaranLelang extends Model
         'created_at',
     ];
 
+
     protected $with = [
         'pengguna',
     ];

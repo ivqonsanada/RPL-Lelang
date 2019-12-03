@@ -1,19 +1,18 @@
 import React, { PureComponent } from 'react'
 import {
-    Form, Input, Tooltip, Icon, DatePicker, Select, Row, Col, Checkbox, Button, AutoComplete, Menu, Upload, message
+    Form, Input, Icon, Button, Upload, message, DatePicker
 } from 'antd';
-require('./CreateShop.css');
+import moment from 'moment';
+const { RangePicker } = DatePicker;
 
-import api from './api';
+import './ShopForm.css';
 
-class FormLelang extends PureComponent {
+class LelangForm extends PureComponent {
     state = {
         confirmDirty: false,
         autoCompleteResult: [],
         loading: false
     };
-
-
 
     handleChange = (info) => {
         if (info.file.status === 'uploading') {
@@ -29,13 +28,11 @@ class FormLelang extends PureComponent {
         }
     }
 
-
-
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                // console.log('Received values of form: ', values);
             }
         });
     }
@@ -62,7 +59,7 @@ class FormLelang extends PureComponent {
         callback();
     }
     beforeUpload(file) {
-       
+
         const isLt2M = file.size / 1024 / 1024 < 2;
         if (!isLt2M) {
             message.error('Image must smaller than 2MB!');
@@ -76,28 +73,12 @@ class FormLelang extends PureComponent {
         reader.readAsDataURL(img);
     }
 
+    onChange(dates, dateStrings) {
+        console.log('From: ', dates[0], ', to: ', dates[1]);
+        console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
+    }
+
     render() {
-        const fileList = [{
-            uid: '-1',
-            name: 'xxx.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-            thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        }, {
-            uid: '-2',
-            name: 'yyy.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-            thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        }];
-
-
-        const props2 = {
-            action: '//jsonplaceholder.typicode.com/posts/',
-            listType: 'picture',
-            defaultFileList: [...fileList],
-            className: 'upload-list-inline',
-        };
         const { getFieldDecorator } = this.props.form;
         const { autoCompleteResult } = this.state;
         const imageUrl = this.state.imageUrl;
@@ -114,24 +95,21 @@ class FormLelang extends PureComponent {
                     colon={false}
                     label={(
                         <span style={{ fontSize: 20 }}>
-                            Nama Toko :
+                            Nama Barang:
                         </span>
                     )}
-
-                    style={{ marginBottom: '0px' }}
                 >
                     {getFieldDecorator('nickname', {
                         rules: [{ required: true, whitespace: true }],
                     })(
-                        <Input placeholder={'Nama Toko'} />
+                        <Input placeholder={'Nama Barang'} />
                     )}
                 </Form.Item>
                 <Form.Item
                     colon={false}
                     label={(
-                        <span style={{ fontSize: 20 }}>Alamat :</span>
+                        <span style={{ fontSize: 20 }}>Harga Awal:</span>
                     )}
-                    style={{ marginBottom: '0px' }}
                 >
                     {getFieldDecorator('address', {
                         rules: [{ type: 'address', required: true, message: 'Mohon isi alamat anda!' }],
@@ -143,36 +121,43 @@ class FormLelang extends PureComponent {
                 </Form.Item>
                 <Form.Item
                     colon={false}
-                    style={{ marginBottom: '0px' }}
                     label={(
-                        <span style={{ fontSize: 20 }}>Kode Pos :</span>
+                        <span style={{ fontSize: 20 }}>Kelipatan Penawaran:</span>
                     )}        >
                     {getFieldDecorator('zipcode', {
                         rules: [{ type: 'zipcode', required: true, message: 'Mohon isi kodepos anda!' }],
                     })(
-                        <Input placeholder={"Masukkan Kode Pos "} >
+                        <Input placeholder={"Masukkan kelipatan "} >
 
                         </Input>
                     )}
                 </Form.Item>
                 <Form.Item
                     colon={false}
-                    style={{ marginBottom: '0px' }}
                     label={(
-                        <span style={{ fontSize: 20 }}>Nomor Telepon :</span>
+                        <span style={{ fontSize: 20 }}>Waktu Akhir Lelang:</span>
                     )}        >
                     {getFieldDecorator('phone', {
                         rules: [{ required: true, message: 'Please input your phone number!' }],
                     })(
-                        <Input addonBefore={"+62"} style={{ width: '100%' }} />
+                        <RangePicker
+                            ranges={{
+                                Today: [moment(), moment()],
+                                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                            }}
+                            showTime
+                            format="YYYY/MM/DD HH:mm:ss"
+                            onChange={this.onChange}
+                        />
                     )}
+
+
                 </Form.Item>
 
-                <Form.Item
+                {/* <Form.Item
                     colon={false}
-                    style={{ marginBottom: 0 }}
                     label={(
-                        <span style={{ fontSize: 20 }}>Avatar Toko</span>
+                        <span style={{ fontSize: 20 }}>Foto Barang</span>
 
                     )}>
                     {getFieldDecorator('Avatar', {
@@ -183,34 +168,21 @@ class FormLelang extends PureComponent {
                             name="avatar"
                             listType="picture-card"
                             className="avatar-uploader"
-                            showUploadList={false}
-                            action="//jsonplaceholder.typicode.com/posts/"
-                            beforeUpload={this.beforeUpload}
-                            onChange={this.handleChange}
+                            showUploadList={true}
                         >
                             {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}
                         </Upload>
                     )}
 
-                </Form.Item>
-                <Form.Item
-                    style={{ marginBottom: '0px' }} >
-                    <Button block type="primary" htmlType="submit">Register</Button>
+                </Form.Item> */}
+                <Form.Item >
+                    <Button block type="primary" htmlType="submit">Lelang</Button>
                 </Form.Item>
             </Form >
         );
     }
 }
 
-const WrappedRegistrationForm = Form.create({ name: 'register' })(FormLelang);
+const WrappedLelangForm = Form.create({ name: 'register' })(LelangForm);
 
-export default class CreateLelang extends PureComponent {
-    render() {
-        return (
-            <Menu style={{ width: '40%', margin: 'auto', padding: 16, borderRadius: 10 }}>
-                <h3 style={{ textAlign: 'center' }}>Lelang Barangmu!</h3>
-                <WrappedRegistrationForm />
-            </Menu>
-        )
-    }
-}
+export default WrappedLelangForm;

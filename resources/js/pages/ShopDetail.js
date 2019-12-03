@@ -1,14 +1,13 @@
-import React from 'react';
-
-
-import { Row, Col, Menu, Select, List } from 'antd';
-import ListBarang from './ListBarang';
+import React, { PureComponent, Fragment } from 'react';
+import { Row, Col, Menu, Select, List, Typography } from 'antd';
+const { Paragraph, Title } = Typography;
+import ListBarang from '../components/ListBarang';
 import axios from 'axios';
 
 const { Option } = Select;
 
 function handleChange(value) {
-    console.log(`selected ${value}`);
+    // console.log(`selected ${value}`);
 }
 
 const kurirList = [
@@ -41,7 +40,7 @@ const data = [
     'Laptop'
 ];
 
-export default class ShopDetail extends React.PureComponent {
+export default class ShopDetail extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -50,17 +49,17 @@ export default class ShopDetail extends React.PureComponent {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const id = this.props.location.hash.substring(1);
         axios.get('/api/toko/' + id)
             .then(ress => {
                 this.setState({ dataToko: ress.data.data });
-                console.log(this.state.dataToko)
+                // console.log(this.state.dataToko)
             })
         axios.get('/api/barang/' + id)
             .then(ress => {
                 this.setState({ barangToko: ress.data });
-                console.log(ress.data)
+                // console.log(ress.data)
             })
     }
     render() {
@@ -71,23 +70,19 @@ export default class ShopDetail extends React.PureComponent {
                         <Col
                             xs={24} sm={24} md={8} lg={6} xl={6} xxl={6}
                         >
-                            <img style={{ width: '100%', margin: 8 }} src={this.state.dataToko.foto} />
+                            <img style={{ width: "100%", margin: 8, padding: "24px 0 24px 24px", objectFit: "contain" }} src={this.state.dataToko.foto} />
                         </Col>
                         <Col
                             xs={24} sm={24} md={16} lg={18} xl={18} xxl={18}
-                            style={{ padding: 8 }}
+                            style={{ padding: 24 }}
                         >
-                            <h3>{this.state.dataToko.nama_toko}</h3>
-                            <p>{this.state.dataToko.nama_jalan + ', ' + this.state.dataToko.kode_pos}</p>
-                            <p style={{ fontWeight: 'bold', padding: "8px 0" }}>
-                                Deskripsi Toko
-							</p>
-                            <p>
-                                Kami melelang barang-barang berkualitas
-							</p>
-                            <p style={{ fontWeight: 'bold', padding: "8px 0" }}>
-                                Pengiriman yang didukung
-							</p>
+                            <Title>{this.state.dataToko.nama_toko}</Title>
+
+                            <Paragraph style={{ marginLeft: '10px' }} >{this.state.dataToko.nama_jalan + ', ' + this.state.dataToko.kode_pos}</Paragraph>
+                            <Title level={3}>Deskripsi Toko</Title>
+                            <Paragraph style={{ marginLeft: '10px' }} >Kami melelang barang-barang berkualitas</Paragraph>
+                            <Title level={3}>Pengiriman yang didukung</Title>
+
                             <List
                                 dataSource={kurirList}
                                 renderItem={(item) => (
@@ -97,15 +92,15 @@ export default class ShopDetail extends React.PureComponent {
                         </Col>
                     </Row>
                 </Menu>
-                <div style={{ textAlign: "right", padding: "16px 0" }}>
+                {/* <div style={{ textAlign: "right", padding: "16px 0" }}>
                     <Select defaultValue="terbaru" style={{ width: 300 }} onChange={handleChange}>
                         <Option value="terbaru">Urutkan : Barang Terbaru</Option>
                         <Option value="hargaAsc">Urutkan : Harga Terendah ke Tertinggi</Option>
                         <Option value="hargaDesc">Urutkan : Harga Tertinggi ke Terendah</Option>
                     </Select>
-                </div>
-                <Row type="flex" gutter={16}>
-                    <Col
+                </div> */}
+                {/* <Row type="flex" gutter={16}> */}
+                {/* <Col
                         xs={24} sm={24} md={8} lg={6} xl={6} xxl={6}
                     >
                         <Menu
@@ -119,10 +114,12 @@ export default class ShopDetail extends React.PureComponent {
                                 renderItem={item => (<List.Item>{item}</List.Item>)}
                             />
                         </Menu>
-                    </Col>
-                    <ListBarang data={this.state.barangToko} />
+                    </Col> */}
 
-                </Row>
+
+                <ListBarang data={this.state.barangToko} />
+
+                {/* </Row> */}
             </Col>
         );
     }

@@ -149,7 +149,7 @@ class ShopController extends Controller
         }
     }
 
-    public function deleteShop()
+    public function deleteShop(Request $request)
     {
         try {
             $tokoLelang = TokoLelang::where('username_pengguna', $request->user->username)->first();
@@ -189,8 +189,10 @@ class ShopController extends Controller
             $photo = $request->file('photo');
             if ($photo->isValid()) {
                 if (stripos($photo->getMimeType(), 'image') !== false) {
-                    $photo->move(public_path() . '/uploads/shop_photo/',
-                        $request->user->username . '.' . $photo->getClientOriginalExtension());
+                    $photo->move(
+                        public_path() . '/uploads/shop_photo/',
+                        $request->user->username . '.' . $photo->getClientOriginalExtension()
+                    );
                     return response()->json([
                         'status' => true,
                         'message' => 'Foto toko berhasil diperbarui',

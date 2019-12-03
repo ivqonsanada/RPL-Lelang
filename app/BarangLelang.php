@@ -28,6 +28,8 @@ class BarangLelang extends Model
         'foto',
     ];
 
+    public $timestamps = false;
+
     public function getMaxBidAttribute()
     {
         $max = 0;
@@ -52,8 +54,8 @@ class BarangLelang extends Model
             $foto[] = url($standardPhotoPath . end($photo_name));
         }
 
-        if(!$foto) {
-            $foto[] = "http://sifatit.com/wp-content/uploads/2012/07/dummy-500x337.jpg";
+        if (!$foto) {
+            $foto[] = "https://picsum.photos/id/857/500/337";
         }
 
         return $foto;
@@ -66,12 +68,12 @@ class BarangLelang extends Model
 
     public function komentar()
     {
-        return $this->hasMany('App\KomentarLelang', 'id_barang', 'id');
+        return $this->hasMany('App\KomentarLelang', 'id_barang', 'id')->orderBy('created_at', 'desc');;
     }
 
     public function penawaran()
     {
-        return $this->hasMany('App\PenawaranLelang', 'id_barang', 'id');
+        return $this->hasMany('App\PenawaranLelang', 'id_barang', 'id')->orderBy('harga_penawaran', 'desc');
     }
 
     public function transaksi()

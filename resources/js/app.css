@@ -65,7 +65,7 @@
     border-radius: 4px;
     overflow: auto;
     padding: 8px 24px;
-    height: 300px;
+    height: 230px;
 }
 
 .demo-loading-container {
@@ -74,3 +74,14 @@
     width: 100%;
     text-align: center;
 }
+
+.ant-menu-horizontal > .ant-menu-item:hover, .ant-menu-horizontal > .ant-menu-submenu:hover, .ant-menu-horizontal > .ant-menu-item-active, .ant-menu-horizontal > .ant-menu-submenu-active, .ant-menu-horizontal > .ant-menu-item-open, .ant-menu-horizontal > .ant-menu-submenu-open, .ant-menu-horizontal > .ant-menu-item-selected, .ant-menu-horizontal > .ant-menu-submenu-selected {
+    /* color: unset; */
+    border-bottom: unset;
+}
+
+.ant-divider-horizontal {
+    margin: 5px 0;
+}
+
+@import "~react-image-gallery/styles/css/image-gallery.css";

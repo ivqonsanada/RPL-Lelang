@@ -15,9 +15,20 @@ class KomentarLelang extends Model
         'id_barang',
     ];
 
+    public $timestamps = false;
+
     protected $with = [
         'pengguna',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->created_at = $model->freshTimestamp();
+        });
+    }
 
     public function pengguna()
     {

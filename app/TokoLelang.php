@@ -19,9 +19,9 @@ class TokoLelang extends Model
         'kode_pos',
     ];
 
-	public $timestamps = false;
-	
-	protected $appends = ['foto'];
+    public $timestamps = false;
+
+    protected $appends = ['foto'];
 
     public function pemilik()
     {
@@ -31,9 +31,9 @@ class TokoLelang extends Model
     public function barang()
     {
         return $this->hasMany('App\BarangLelang', 'id_toko', 'id');
-	}
-	
-	public function getFotoAttribute()
+    }
+
+    public function getFotoAttribute()
     {
 
         $standardPhotoPath = '/uploads/shop_photo/';

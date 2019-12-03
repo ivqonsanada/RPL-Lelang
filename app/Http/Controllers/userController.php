@@ -191,7 +191,7 @@ class UserController extends Controller
                 $project->email = $validatedData['email'];
                 $project->nama = $validatedData['nama'];
 				$project->tanggal_lahir = $validatedData['tanggal_lahir'];
-				
+
                 $project->save();
                 return response()->json([
                     'status' => true,

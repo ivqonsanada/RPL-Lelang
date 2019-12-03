@@ -1,21 +1,18 @@
 import React, { PureComponent } from 'react'
 import {
-    Form, Input, Spin, Icon, Select, Row, Col, Checkbox, Button, AutoComplete, Menu, Upload, message
+    Form, Input, Icon, Button, message
 } from 'antd';
-import { Redirect } from 'react-router'
-
 import Axios from 'axios';
-require('./CreateShop.css');
+import './ShopForm.css';
+import API from '../api'
 
-class RegistrationForm extends PureComponent {
+class ShopForm extends PureComponent {
     state = {
         confirmDirty: false,
         autoCompleteResult: [],
         loading: false,
-        loadingButton:false,
+        loadingButton: false,
     };
-
-
 
     handleSubmit = (e) => {
         e.preventDefault();
@@ -28,20 +25,17 @@ class RegistrationForm extends PureComponent {
                     kelurahan: values.kelurahan,
                     kode_pos: values.zipcode
                 };
-                console.log(body);
-                this.setState({loadingButton:true});
+                // console.log(body);
+                this.setState({ loadingButton: true });
                 try {
                     const data = await Axios.post('/api/daftar-toko', body, { headers: { Authorization: localStorage.token } });
-                    console.log(data.data);
-                    this.setState({loadingButton:false});
+                    this.setState({ loadingButton: false });
                     message.success(`Toko Berhasil Dibuat.. Redirect ke halaman Toko dalam 3 detik...`);
                     await new Promise(resolve => { setTimeout(resolve, 3000); });
                     window.location.replace('/shop');
                 }
                 catch (err) {
-                    this.setState({loadingButton:false});
-                    console.log('error');
-                    console.log(err);
+                    this.setState({ loadingButton: false });
                     message.error(`Terdapat Kesalahan`);
                     this.setState({ status: true });
                 }
@@ -72,7 +66,7 @@ class RegistrationForm extends PureComponent {
         callback();
     }
     beforeUpload(file) {
-    
+
         const isLt2M = file.size / 1024 / 1024 < 2;
         if (!isLt2M) {
             message.error('Image must smaller than 2MB!');
@@ -195,69 +189,14 @@ class RegistrationForm extends PureComponent {
 
                 <Form.Item
                     style={{ marginBottom: '0px' }} >
-                    <Button block type="primary" htmlType="submit" loading={this.state.loadingButton}>Register</Button>
+                    <Button block type="primary" htmlType="submit" loading={this.state.loadingButton}>Buat Toko</Button>
                 </Form.Item>
             </Form >
         );
     }
 }
 
-const WrappedRegistrationForm = Form.create({ name: 'register' })(RegistrationForm);
 
-export default class CreateShop extends PureComponent {
+const WrappedShopForm = Form.create({ name: 'shop' })(ShopForm);
 
-    state = {
-        loading: true,
-        status: true,
-        username: undefined,
-    }
-
-    async componentDidMount() {
-        try {
-            const data = await Axios.get('/api/cek-toko/', { headers: { Authorization: localStorage.token } });
-            this.setState({ loading: false })
-            this.setState({ status: false });
-            return Promise.resolve();
-        }
-        catch (err) {
-            this.setState({ loading: false })
-            this.setState({ status: true });
-        }
-    }
-
-    render() {
-        if (this.state.loading) {
-            return (
-                <div>
-                    <Spin style={{ marginLeft: '50%' }} />
-                </div>
-            )
-        }
-        else {
-            console.log('status')
-            console.log(this.state.status);
-            if (this.state.status) {
-                return (
-                    <Menu style={{ width: '40%', margin: 'auto', padding: 16, borderRadius: 10 }}>
-                        <h3 style={{ textAlign: 'center' }}>Buat Toko Lelangmu Sekarang</h3>
-                        <WrappedRegistrationForm />
-                    </Menu>
-                );
-            }
-            else {
-                return (
-                    <div>
-                        <Redirect to="/shop">
-
-                        </Redirect>
-                    </div>
-                )
-            }
-        }
-    }
-}
-
-
-const { Option } = Select;
-const AutoCompleteOption = AutoComplete.Option;
-
+export default WrappedShopForm;

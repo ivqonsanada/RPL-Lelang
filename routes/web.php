@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\userController;
 
 /*
@@ -17,4 +18,3 @@ use App\Http\Controllers\userController;
 // });
 
 Route::view('/{path?}', 'app');
-
